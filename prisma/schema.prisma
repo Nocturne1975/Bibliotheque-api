@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Membre {
+ id Int @id @default(autoincrement())
+ nom String
+ prenom String
+ email String @unique
+ telephone String ?
+ dateInscription DateTime
+ actif Boolean
+ emprunts [Emprunt]
+ @@index([email])
+}
+
+ model Livre {
+ id Int @id @default(autoincrement())
+ titre String
+ isbn String(unique)
+ auteur String
+ editeur String
+ anneePublication Int
+ categorie String
+ disponible Boolean
+ emprunts [Emprunt]
+ @@index([isbn])
+ @@index([categorie])
+ @@index([auteur])
+ }
+
+ model Emprunt {
+ id Int @id @default(autoincrement())
+ membreId Int
+ livreId Int
+ dateEmprunt DateTime
+ dateRetourPrevue DateTime
+ dateRetourEffective DateTime ?
+ statut Enum{EN_COURS,RETOURNE,EN_RETARD}
+ membre Membre @relation(fields: [membreId], references: [id])
+ livre Livre @relation(fields: [livreId], references: [id])
+ }
+
+ enum StatutEmprunt {
+   EN_COURS
+   RETOURNE
+   EN_RETARD
+ }
