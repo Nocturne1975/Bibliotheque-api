@@ -1,0 +1,67 @@
+{
+  "info": {
+    "name": "Bibliotheque API - Collection",
+    "_postman_id": "bibliotheque-api-collection",
+    "description": "Collection de base pour tester l'API Bibliotheque",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create membre",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Marie\",\n  \"email\": \"marie.dupont@example.com\",\n  \"telephone\": \"0123456789\"\n}"
+        },
+        "url": { "raw": "http://localhost:3000/membres", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["membres"] }
+      }
+    },
+    {
+      "name": "Create livre",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titre\": \"Les Miserables\",\n  \"isbn\": \"978-2-253-09633-4\",\n  \"auteur\": \"Victor Hugo\",\n  \"editeur\": \"Le Livre de Poche\",\n  \"anneePublication\": 1862,\n  \"categorie\": \"Roman\"\n}"
+        },
+        "url": { "raw": "http://localhost:3000/livres", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["livres"] }
+      }
+    },
+    {
+      "name": "Create emprunt",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{ \"membreId\": 1, \"livreId\": 1 }" },
+        "url": { "raw": "http://localhost:3000/emprunts", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["emprunts"] }
+      }
+    },
+    {
+      "name": "Retourner livre (emprunt 1)",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": { "raw": "http://localhost:3000/emprunts/1/retourner", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["emprunts","1","retourner"] }
+      }
+    },
+    {
+      "name": "Lister livres",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:3000/livres", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["livres"] }
+      }
+    },
+    {
+      "name": "Stats générales",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:3000/stats", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["stats"] }
+      }
+    }
+  ]
+}

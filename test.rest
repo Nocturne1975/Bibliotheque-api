@@ -1,0 +1,26 @@
+### Tester la route GET membres
+GET http://localhost:3000/membres
+
+### Ajouter un membre
+POST http://localhost:3000/membres
+Content-Type: application/json
+
+{
+  "nom": "Dupont",
+  "prenom": "Jean"
+}
+
+### Tester la route GET livres
+GET http://localhost:3000/livres
+
+### Ajouter un livre
+POST http://localhost:3000/livres
+Content-Type: application/json
+
+{
+  "titre": "Le Petit Prince",
+  "auteur": "Antoine de Saint-Exupéry"
+}
+
+### Tester la route GET emprunts
+GET http://localhost:3000/emprunts

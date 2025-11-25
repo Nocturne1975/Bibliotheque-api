@@ -5,55 +5,79 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Membre {
- id Int @id @default(autoincrement())
- nom String
- prenom String
- email String @unique
- telephone String ?
- dateInscription DateTime
- actif Boolean
- emprunts [Emprunt]
- @@index([email])
+  id             Int      @id @default(autoincrement())
+  nom            String
+  prenom         String
+  email          String   @unique
+  telephone      String?
+  dateInscription DateTime @default(now())
+  actif          Boolean  @default(true)
+  emprunts       Emprunt[]
+
+  @@index([email])
 }
 
- model Livre {
- id Int @id @default(autoincrement())
- titre String
- isbn String(unique)
- auteur String
- editeur String
- anneePublication Int
- categorie String
- disponible Boolean
- emprunts [Emprunt]
- @@index([isbn])
- @@index([categorie])
- @@index([auteur])
- }
+model Livre {
+  id              Int      @id @default(autoincrement())
+  titre           String
+  isbn            String   @unique
+  auteur          String
+  editeur         String?
+  anneePublication Int?
+  categorie       String?
+  disponible      Boolean  @default(true)
+  emprunts        Emprunt[]
 
- model Emprunt {
- id Int @id @default(autoincrement())
- membreId Int
- livreId Int
- dateEmprunt DateTime
- dateRetourPrevue DateTime
- dateRetourEffective DateTime ?
- statut Enum{EN_COURS,RETOURNE,EN_RETARD}
- membre Membre @relation(fields: [membreId], references: [id])
- livre Livre @relation(fields: [livreId], references: [id])
- }
+  @@index([isbn])
+  @@index([categorie])
+  @@index([auteur])
+}
 
- enum StatutEmprunt {
-   EN_COURS
-   RETOURNE
-   EN_RETARD
- }
+enum StatutEmprunt {
+  EN_COURS
+  RETOURNE
+  EN_RETARD
+}
+
+model Emprunt {
+  id                 Int          @id @default(autoincrement())
+  membreId           Int
+  livreId            Int
+  dateEmprunt        DateTime
+  dateRetourPrevue   DateTime
+  dateRetourEffective DateTime?
+  statut             StatutEmprunt
+  prolonge           Boolean      @default(false)
+
+  membre             Membre       @relation(fields: [membreId], references: [id])
+  livre              Livre        @relation(fields: [livreId], references: [id])
+
+  @@index([membreId])
+  @@index([livreId])
+  @@index([statut])
+}
+
+model Reservation {
+  id              Int      @id @default(autoincrement())
+  membreId        Int
+  livreId         Int
+  statut          String   @default("ACTIVE") // ACTIVE, ANNULEE, SATISFAITE
+  dateReservation DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  membre          Membre   @relation(fields: [membreId], references: [id])
+  livre           Livre    @relation(fields: [livreId], references: [id])
+
+  @@index([membreId])
+  @@index([livreId])
+  @@index([statut])
+}
